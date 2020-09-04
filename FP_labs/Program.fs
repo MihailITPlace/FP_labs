@@ -1,7 +1,6 @@
-﻿open FP_labs.Lab4.Supermarket
-open Labs
+﻿open FP_labs.Labs.Logic
 
 [<EntryPoint>]
 let main argv =
-    test() |> ignore
+    lab4() |> ignore
     0

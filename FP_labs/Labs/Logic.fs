@@ -1,8 +1,8 @@
 // Вариант 27
 
-module Labs
-
-    open System.IO    
+module FP_labs.Labs.Logic
+    open System.IO
+    open FP_labs.Labs.Supermarket
     
     //7. Для заданного списка слов найти слова, содержащие не менее одной буквы Т    
     let lab1 () =
@@ -60,5 +60,16 @@ module Labs
     
         
     let lab4 () =
-        
-        0
+       let cashier = Cashier("Вася")
+       let seniorCashier = SeniorCashier("Иван Петрович")
+       
+       (cashier :> IEmployer).Hire()
+       (seniorCashier :> IEmployer).Hire()
+       
+       cashier.SitDownAtCheckout()   
+       seniorCashier.SitDownAtCheckout()
+       
+       let milk = Milk(120)
+       cashier.SellProduct milk
+       seniorCashier.SellProduct milk        
+       0

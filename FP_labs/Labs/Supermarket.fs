@@ -1,14 +1,12 @@
-module FP_labs.Lab4.Supermarket
-
-open System
+module FP_labs.Labs.Supermarket
 
 type IEmployer =
    abstract member PaySalary : int -> unit
    abstract member Hire : unit -> unit
    abstract member Dismiss : unit -> unit
    
-type IProduct =
-   abstract member ChangeExpirationDate : DateTime -> unit
+type IProduct =   
+   abstract member Sell : unit -> unit
 
    
 type Cashier(name: string) =
@@ -22,7 +20,9 @@ type Cashier(name: string) =
    
    abstract member SitDownAtCheckout : unit -> unit
    
-   override this.SitDownAtCheckout() = printf "Кассир %s сел за кассу...\n" name   
+   override this.SitDownAtCheckout() = printf "Кассир %s сел за кассу...\n" name
+   
+   member this.SellProduct product = (product :> IProduct).Sell()
 
    
 type SeniorCashier(name: string) =
@@ -35,15 +35,11 @@ type SeniorCashier(name: string) =
    
    override this.SitDownAtCheckout() =
       printf "Старшего кассира нельзя посадить за кассу. Сеньор(ита) %s курит\n" name
-   
-let test unit =
-   let cashier = new Cashier("Вася")
-   let seniorCashier = new SeniorCashier("Иван Петрович")
-   
-   (cashier :> IEmployer).Hire()
-   (seniorCashier :> IEmployer).Hire()
-   
-   cashier.SitDownAtCheckout()   
-   seniorCashier.SitDownAtCheckout()   
-   0
-   
+
+
+type Milk(price: int) =
+   let price = price
+   interface IProduct with
+      member this.Sell() = printf "Товар продан за %d\n" price
+
+ 

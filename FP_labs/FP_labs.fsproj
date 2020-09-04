@@ -6,9 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Labs.fs" />
+        <Compile Include="Labs\Supermarket.fs" />
+        <Compile Include="Labs\Logic.fs" />
         <Content Include="files\lab2.txt" />
-        <Compile Include="Lab4\Supermarket.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
