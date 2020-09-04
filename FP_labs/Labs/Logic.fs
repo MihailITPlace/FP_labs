@@ -1,6 +1,7 @@
 // Вариант 27
 
 module FP_labs.Labs.Logic
+    open FP_labs.Labs
     open System.IO
     open FP_labs.Labs.Supermarket
     
