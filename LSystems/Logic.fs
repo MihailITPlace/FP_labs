@@ -32,26 +32,4 @@ module LSystems.Logic
             | '+' -> stack <- (x, y, currentAngle + angle) :: stack.Tail
             | '-' -> stack <- (x, y, currentAngle - angle) :: stack.Tail
             | '[' -> stack <- stack.Head :: stack
-            | ']' -> stack <- stack.Tail
-        
-    
-    
-//    let draw str (g: Graphics) (len: double) (angle: double) =        
-//        let blackPen = new Pen(Color.Black, 1.5f)
-//        
-//        let mutable currentAngle = 0.0
-//        let mutable x = 400.0
-//        let mutable y = 200.0
-//        
-//        let size = (str |> String.length) - 1
-//                
-//        for i = 0 to size do       
-//            match str.[i] with
-//            | 'F' ->                
-//                let newX = len * (cos (currentAngle * Math.PI / 180.0)) + x
-//                let newY = len * (-sin (currentAngle * Math.PI / 180.0)) + y                
-//                g.DrawLine(blackPen, float32 x,  float32 y, float32 newX, float32 newY)
-//                x <- newX
-//                y <- newY
-//            | '+' -> currentAngle <- (currentAngle + angle)
-//            | '-' -> currentAngle <- (currentAngle - angle)     
+            | ']' -> stack <- stack.Tail   

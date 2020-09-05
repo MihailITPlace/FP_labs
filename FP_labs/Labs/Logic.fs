@@ -26,16 +26,18 @@ module FP_labs.Labs.Logic
                                  |> Seq.map(fun l -> l.Split ' ')
                                  |> Seq.concat
                                  
-        let text = readLines("/home/michael/RiderProjects/FP_labs/FP_labs/files/lab2.txt")
-        text |> Seq.iteri(fun i s ->
-            if (i + 1) % 3 = 0 then printf "%s\n" s            
-        )
+        let text = readLines("files/lab2.txt")
         
-        let mostFrequentChar = text |> Seq.map(fun s -> s |> Seq.toList)
+        let mutable lst = []
+        text |> Seq.iteri(fun i s ->  if i % 3 = 0 then lst <- s :: lst)
+        
+        let mostFrequentChar = text
+                               |> Seq.map(fun s -> s |> Seq.toList)
                                |> Seq.concat
                                |> Seq.countBy(fun c -> c)
                                |> Seq.maxBy (fun g -> snd g )                           
         
+        File.WriteAllLines("files/out_lab2.txt", lst)
         printf "%c %d\n" (fst mostFrequentChar ) (snd mostFrequentChar)        
         0       
 
@@ -56,21 +58,53 @@ module FP_labs.Labs.Logic
         for i = 0 to indexOfMax - 1 do
             arr.[i] <- 3 * arr.[i] 
             
-        arr |> Array.iter(fun x -> printf "%d " x) |> ignore
+        arr |> Array.iter(fun x -> printf "%d " x)
         0
     
         
     let lab4 () =
-       let cashier = Cashier("Вася")
-       let seniorCashier = SeniorCashier("Иван Петрович")
+        let cashier = Cashier("Вася")
+        let seniorCashier = SeniorCashier("Иван Петрович")
        
-       (cashier :> IEmployer).Hire()
-       (seniorCashier :> IEmployer).Hire()
+        (cashier :> IEmployer).Hire()
+        (seniorCashier :> IEmployer).Hire()
        
-       cashier.SitDownAtCheckout()   
-       seniorCashier.SitDownAtCheckout()
+        cashier.SitDownAtCheckout()   
+        seniorCashier.SitDownAtCheckout()
        
-       let milk = Milk(120)
-       cashier.SellProduct milk
-       seniorCashier.SellProduct milk        
-       0
+        let milk = Milk(120)
+        cashier.SellProduct milk
+        seniorCashier.SellProduct milk        
+        0
+
+    
+    let lab5 () =        
+        let readLines filePath = File.ReadAllLines(filePath)                                 
+                                 |> Seq.map(fun l -> l.Split ' ')
+                                 |> Seq.concat
+
+        let mutable freq = ' ', 0        
+        let mostFrequentChar text =
+            async {
+                freq <- text
+                        |> Seq.map(fun s -> s |> Seq.toList)
+                        |> Seq.concat
+                        |> Seq.countBy(fun c -> c)
+                        |> Seq.maxBy (fun g -> snd g )
+            }
+                
+        let mutable lst = []      
+        let thridsWords text =
+            async {
+                text |> Seq.iteri(fun i s ->  if i % 3 = 0 then lst <- s :: lst)                                
+            }
+            
+        let text = readLines "files/lab2.txt"
+        [thridsWords text; mostFrequentChar text]
+            |> Async.Parallel
+            |> Async.Ignore
+            |> Async.RunSynchronously
+            
+        printfn "%c %d" (fst freq) (snd freq)
+        File.WriteAllLines("files/out_lab5.txt", lst)
+        0

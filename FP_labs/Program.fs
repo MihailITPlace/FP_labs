@@ -1,6 +1,11 @@
-﻿open FP_labs.Labs.Logic
+﻿open System
+open FP_labs.Labs.Logic
 
 [<EntryPoint>]
 let main argv =
-    lab4() |> ignore
+    let start = DateTime.Now
+    lab5() |> ignore
+    let finish = DateTime.Now
+    
+    printfn "Время %f мс" (finish - start).TotalMilliseconds
     0
