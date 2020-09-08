@@ -4,6 +4,11 @@ module FP_labs.Labs.Logic
     open FP_labs.Labs
     open System.IO
     open FP_labs.Labs.Supermarket
+
+    //let filePath = "files/lab2.txt"
+    //let fileOutPath = "files/out_lab.txt"
+    let fileInputPath = @"C:\Users\алексей\Desktop\FP_labs\FP_labs\files\lab2.txt"
+    let fileOutPath = @"C:\Users\алексей\Desktop\FP_labs\FP_labs\files\out_lab.txt"
     
     //7. Для заданного списка слов найти слова, содержащие не менее одной буквы Т    
     let lab1 () =
@@ -26,7 +31,7 @@ module FP_labs.Labs.Logic
                                  |> Seq.map(fun l -> l.Split ' ')
                                  |> Seq.concat
                                  
-        let text = readLines("files/lab2.txt")
+        let text = readLines(fileInputPath)
         
         let mutable lst = []
         text |> Seq.iteri(fun i s ->  if i % 3 = 0 then lst <- s :: lst)
@@ -37,7 +42,7 @@ module FP_labs.Labs.Logic
                                |> Seq.countBy(fun c -> c)
                                |> Seq.maxBy (fun g -> snd g )                           
         
-        File.WriteAllLines("files/out_lab2.txt", lst)
+        File.WriteAllLines(fileOutPath, lst)
         printf "%c %d\n" (fst mostFrequentChar ) (snd mostFrequentChar)        
         0       
 
@@ -99,12 +104,12 @@ module FP_labs.Labs.Logic
                 text |> Seq.iteri(fun i s ->  if i % 3 = 0 then lst <- s :: lst)                                
             }
             
-        let text = readLines "files/lab2.txt"
+        let text = readLines fileInputPath
         [thridsWords text; mostFrequentChar text]
             |> Async.Parallel
             |> Async.Ignore
             |> Async.RunSynchronously
             
         printfn "%c %d" (fst freq) (snd freq)
-        File.WriteAllLines("files/out_lab5.txt", lst)
+        File.WriteAllLines(fileOutPath, lst)
         0
