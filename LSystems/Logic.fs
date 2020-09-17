@@ -1,35 +1,34 @@
-//start -> -F++F++F--
-//F -> F-F+F+F-
-
 module LSystems.Logic
     open System
-    open System.Drawing
-    
-    let replaceProduction (str: string) (prod: string) : string =
-        str.Replace("F", prod)                
-    
-    let first(c, _, _) = c
-    let second(_, c, _) = c
-    let thrid(_, _, c) = c
-    
-    let drawStack str (g: Graphics) (len: double) (angle: double) =
-        let mutable stack = [(400.0, 500.0, 90.0)]
-        let blackPen = new Pen(Color.Black, 1.5f)
+    open System.Drawing   
+
         
-        let size = (str |> String.length) - 1
+    let rec getFinalProduction (str: string) (prod: string) (numberOfRounds) : string =
+        if numberOfRounds = 0 then
+            str
+        else
+            getFinalProduction (str.Replace("F", prod)) prod (numberOfRounds - 1)
+    
+
+    let draw str (startX: double, startY: double, startAngle: double) (lineLength: double, angleShift: double) (g: Graphics) =
+        let blackPen = new Pen(Color.Black, 1.5f)        
         
-        for i = 0 to size do
-            let currentAngle = thrid stack.Head
-            let x = first stack.Head
-            let y = second stack.Head
+        let rec drawRec (lst: List<char>) (args: List<(double*double*double)>) (g: Graphics) =
+            if lst.IsEmpty then
+                ()
+            else
+                let (x, y, currentAngle) = args.Head
+                match lst.Head with
+                | 'F' ->
+                    let newX = lineLength * (cos (currentAngle * Math.PI / 180.0)) + x
+                    let newY = lineLength * (-sin (currentAngle * Math.PI / 180.0)) + y                
+                    g.DrawLine(blackPen, float32 x,  float32 y, float32 newX, float32 newY)
+                    drawRec lst.Tail ((newX, newY, currentAngle) :: args.Tail) g
+                | '+' -> drawRec lst.Tail ((x, y, currentAngle + angleShift) :: args.Tail) g
+                | '-' -> drawRec lst.Tail ((x, y, currentAngle - angleShift) :: args.Tail) g
+                | '[' -> drawRec lst.Tail ((x, y, currentAngle) :: args) g
+                | ']' -> drawRec lst.Tail args.Tail g
+                | _   -> printfn "Неизвестный  символ. Допускаются только: '[', ']', 'F', '+', '-'" 
+
             
-            match str.[i] with
-            | 'F' ->                
-                let newX = len * (cos (currentAngle * Math.PI / 180.0)) + x
-                let newY = len * (-sin (currentAngle * Math.PI / 180.0)) + y                
-                g.DrawLine(blackPen, float32 x,  float32 y, float32 newX, float32 newY)                
-                stack <- (newX, newY, currentAngle) :: stack.Tail                 
-            | '+' -> stack <- (x, y, currentAngle + angle) :: stack.Tail
-            | '-' -> stack <- (x, y, currentAngle - angle) :: stack.Tail
-            | '[' -> stack <- stack.Head :: stack
-            | ']' -> stack <- stack.Tail   
+        drawRec (Seq.toList str) [(startX, startY, startAngle)] g        

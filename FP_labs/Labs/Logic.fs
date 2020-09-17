@@ -21,12 +21,6 @@ module FP_labs.Labs.Logic
         и найти самую часто встречающуюся в них букву
     *)
     let lab2 () =
-
-//        let readLines (filePath:string) = seq {
-//            use sr = new StreamReader (filePath)
-//            while not sr.EndOfStream do
-//                yield sr.ReadLine ()
-//        }
         let readLines filePath = File.ReadLines(filePath)
                                  |> Seq.map(fun l -> l.Split ' ')
                                  |> Seq.concat
