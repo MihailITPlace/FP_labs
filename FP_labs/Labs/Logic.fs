@@ -13,7 +13,7 @@ module FP_labs.Labs.Logic
     //7. Для заданного списка слов найти слова, содержащие не менее одной буквы Т    
     let lab1 () =
         let words = ["qwErt"; "eboll"; "TTT"; "HELLO"; "aatTaa"]        
-        words |> List.iter( fun i -> if i.Contains('T') then printf "%s\n" i)        
+        words |> List.iter( fun i -> if i.Contains('T') then printfn "%s" i)        
         0
         
     (*
@@ -27,8 +27,10 @@ module FP_labs.Labs.Logic
                                  
         let text = readLines(fileInputPath)
         
-        let mutable lst = []
-        text |> Seq.iteri(fun i s ->  if i % 3 = 0 then lst <- s :: lst)
+        let lst = text
+                  |> Seq.indexed
+                  |> Seq.filter (fun (idx, _) -> idx % 3 = 0)
+                  |> Seq.map (fun (_, itm) -> itm)
         
         let mostFrequentChar = text
                                |> Seq.map(fun s -> s |> Seq.toList)
@@ -78,32 +80,34 @@ module FP_labs.Labs.Logic
 
     
     let lab5 () =        
-        let readLines filePath = File.ReadAllLines(filePath)                                 
+        let readLines filePath = File.ReadLines(filePath)                                 
                                  |> Seq.map(fun l -> l.Split ' ')
                                  |> Seq.concat
-
-        let mutable freq = ' ', 0        
+                
         let mostFrequentChar text =
             async {
-                freq <- text
-                        |> Seq.map(fun s -> s |> Seq.toList)
-                        |> Seq.concat
-                        |> Seq.countBy(fun c -> c)
-                        |> Seq.maxBy (fun g -> snd g )
+                let freq = text
+                           |> Seq.map(fun s -> s |> Seq.toList)
+                           |> Seq.concat
+                           |> Seq.countBy(fun c -> c)
+                           |> Seq.maxBy (fun g -> snd g )
+                printfn "%c %d" (fst freq) (snd freq)
             }
-                
-        let mutable lst = []      
+              
         let thridsWords text =
             async {
-                text |> Seq.iteri(fun i s ->  if i % 3 = 0 then lst <- s :: lst)                                
+                let lst = text
+                          |> Seq.indexed
+                          |> Seq.filter (fun (idx, _) -> idx % 3 = 0)
+                          |> Seq.map (fun (_, itm) -> itm)
+                File.WriteAllLines(fileOutPath, lst)                
             }
             
-        let text = readLines fileInputPath
-        [thridsWords text; mostFrequentChar text]
+        let text1 = readLines fileInputPath
+        let text2 = readLines fileInputPath
+        [thridsWords text1; mostFrequentChar text2]
             |> Async.Parallel
             |> Async.Ignore
-            |> Async.RunSynchronously
-            
-        printfn "%c %d" (fst freq) (snd freq)
-        File.WriteAllLines(fileOutPath, lst)
+            |> Async.RunSynchronously        
+        
         0

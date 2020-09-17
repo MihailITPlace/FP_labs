@@ -9,8 +9,7 @@
         <Compile Include="Labs\Supermarket.fs" />
         <Compile Include="Labs\Logic.fs" />
         <Content Include="files\lab2.txt" />
-        <Content Include="files\out_lab2.txt" />
-        <Content Include="files\out_lab5.txt" />
+        <Content Include="files\out_lab.txt" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
