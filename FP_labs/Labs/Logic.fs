@@ -29,8 +29,7 @@ module FP_labs.Labs.Logic
         
         let lst = text
                   |> Seq.indexed
-                  |> Seq.filter (fun (idx, _) -> idx % 3 = 0)
-                  |> Seq.map (fun (_, itm) -> itm)
+                  |> Seq.choose (fun (idx, itm) -> if idx % 3 = 0 then Some(itm) else None)
         
         let mostFrequentChar = text
                                |> Seq.map(fun s -> s |> Seq.toList)
@@ -98,8 +97,7 @@ module FP_labs.Labs.Logic
             async {
                 let lst = text
                           |> Seq.indexed
-                          |> Seq.filter (fun (idx, _) -> idx % 3 = 0)
-                          |> Seq.map (fun (_, itm) -> itm)
+                          |> Seq.choose (fun (idx, itm) -> if idx % 3 = 0 then Some(itm) else None)
                 File.WriteAllLines(fileOutPath, lst)                
             }
             
